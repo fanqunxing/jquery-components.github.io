@@ -1,20 +1,22 @@
 # jquery-componets
 
-#### 1 介绍
+## 1 介绍
 
-##### 1.1 什么是jquery-componets
+### 1.1 什么是jquery-componets
 
-jquery是一个操作dom的库，在SPA和组件化开发的潮流下，jquery使用变得不主流。jquery-componets 是为了解决jquery无法组件化和无法构建SPA的工具。
+jquery是一个操作dom的库，jquery有着无法做单页面和组件化开发的缺点。jquery-componets 是为了解决jquery无法组件化和无法构建SPA的工具库。
 
-##### 1.2 为什么选择jquery-componets
+### 1.2 为什么选择jquery-componets
 
-jquery-componets 拥有jquery的所有api，并在0新增API的前提下完成了组件化。给使用jquery的同学提供了新的选择。
+jquery-componets 拥有jquery的所有api，并在几乎无新增api的前提下完成了组件化，赋予了jquery新的生命。
 
 
 
-#### 2 安装使用
+## 2 安装使用
 
-##### 2.1 安装jquery-componets-loader
+### 2.1 安装jquery-componets-loader
+
+> jquery-componets-loader是解析.jq文件的webpack的loader
 
 ```shell
 npm install jquery-componets-loader -D
@@ -22,7 +24,9 @@ npm install jquery-componets-loader -D
 
 
 
-##### 2.2 安装jquery-componets
+### 2.2 安装jquery-componets
+
+> jquery-componets 是jquery组件化的核心包，它提供了组件注册、解析、渲染、路由解析、事件分发等核心功能。
 
 ```
 npm install jquery-componets -S
@@ -30,7 +34,8 @@ npm install jquery-componets -S
 
 
 
-##### 2.3 在webpack.config.js的rules中配置jquery-componets-loader
+### 2.3 在webpack.config.js的rules中配置jquery-componets-loader
+
 
 ```javascript
 module: {
@@ -45,7 +50,7 @@ module: {
 
 
 
-##### 2.4 HTML入口页面
+### 2.4 HTML入口页面
 
 ```html
 <body>
@@ -55,7 +60,7 @@ module: {
 
 
 
-##### 2.5 编写App.jq
+### 2.5 编写App.jq
 
 ```html
 <template>
@@ -76,14 +81,13 @@ module: {
 
 
 
-##### 2.6 在main.js中使用
+### 2.6 在main.js中使用
 
 ```javascript
 import $ from 'jquery';
 import { useJquery } from 'jquery-componets';
 import App from './App.jq';
 
-// 这里初始化劫持jquery对象
 useJquery($);
 $("#app").html(App);
 ```
@@ -98,18 +102,18 @@ hello jquery-componets
 
 
 
-#### 3. 组件
+## 3. 组件
 
-##### 3.1 组件创建
+### 3.1 组件创建
 
-使用js创建一个组件
+使用js创建一个组件，此方法不推荐。仅用于示例。
 
 ```js
 // 声明一个组件
-let comp = {
+const comp = {
   template: '<div class="btn">我是一个组件, 点击我~</div>',
-  ready($$) {
-    $$(".btn").click(function() {
+  ready($) {
+    $(".btn").click(function() {
       alert('hello world!')
     });
   }
@@ -156,7 +160,7 @@ simpCom.jq文件
 
 
 
-##### 3.2 template的使用
+### 3.2 template的使用
 
 注意：
 
@@ -174,7 +178,7 @@ simpCom.jq文件
 
 
 
-##### 3.3 script的使用
+### 3.3 script的使用
 
 script默认导出一个函数，这个函数会在组件被挂载完成后执行。
 
@@ -192,13 +196,13 @@ script默认导出一个函数，这个函数会在组件被挂载完成后执�
 
 
 
-##### 3.4 style的使用
+### 3.4 style的使用
 
-style里面正常使用css即可，暂不支持less等扩展语言。
+style里面正常使用css即可，支持less等扩展语言。
 
 
 
-##### 3.5 全局组件
+### 3.5 全局组件
 
 我们声明了全局组件则不再需要引入。
 
@@ -208,15 +212,14 @@ style里面正常使用css即可，暂不支持less等扩展语言。
 
 ```js
 import MyBtn from './MyBtn.jq';
-// 即可全局使用
 $.component('MyBtn', MyBtn)
 ```
 
 
 
-#### 4 组件传参
+## 4 组件传参
 
-##### 4.1 父组件向子组件传参
+### 4.1 父组件向子组件传参
 
 
 
@@ -315,7 +318,7 @@ $.component('MyBtn', MyBtn)
 
 
 
-##### 4.2 子组件向父组件传参
+### 4.2 子组件向父组件传参
 
 子组件
 
@@ -352,9 +355,9 @@ $.component('MyBtn', MyBtn)
 
 
 
-#### 5 路由
+## 5 路由
 
-##### 5.1 使用路由
+### 5.1 使用路由
 
 配置路由文件
 
@@ -403,7 +406,7 @@ App.jq中就可以使用router-view标签, `<router-view></router-view>`就可�
 
 
 
-##### 5.2 监听路由变化
+### 5.2 监听路由变化
 
 通过router事件即可监听
 
@@ -422,7 +425,7 @@ App.jq中就可以使用router-view标签, `<router-view></router-view>`就可�
 
 
 
-#### 6 动态组件
+## 6 动态组件
 
 动态组件是指在组件内部使用html方法挂载一个复杂组件的时候使用
 
@@ -466,7 +469,7 @@ App.jq中就可以使用router-view标签, `<router-view></router-view>`就可�
 
 
 
-#### 7 对jquery做了哪些改动
+## 7 对jquery做了哪些改动
 
 1. 重写了html方法，在支持原来的字符串html写入dom的条件下，也支持了写入jquery组件。
 2. 新增了$.router方法挂载路由 (如果需要路由的话)。
