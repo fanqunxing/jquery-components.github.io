@@ -4,11 +4,11 @@
 
 ### 1.1 什么是jquery-components
 
-jquery是一个操作dom的库，jquery有着无法做单页面和组件化开发的缺点。jquery-components 是为了解决jquery无法组件化和无法构建SPA的工具库。
+jquery是一个操作dom的库，jquery无法同vue和react一样做单页面和组件化开发。jquery-components 正是为了解决这个问题。
 
 ### 1.2 为什么选择jquery-components
 
-jquery-components 拥有jquery的所有api，并在几乎无新增api的前提下完成了组件化，赋予了jquery新的生命。
+jquery-components 拥有jquery的所有api，几乎无新增api，赋予了jquery新的生命，使用jquery的同学可以快速上手。
 
 
 
