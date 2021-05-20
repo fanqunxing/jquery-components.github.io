@@ -1,48 +1,57 @@
-# jquery-componets
+# jquery-components
 
 ## 1 介绍
 
-### 1.1 什么是jquery-componets
+### 1.1 什么是jquery-components
 
-jquery是一个操作dom的库，jquery有着无法做单页面和组件化开发的缺点。jquery-componets 是为了解决jquery无法组件化和无法构建SPA的工具库。
+jquery是一个操作dom的库，jquery有着无法做单页面和组件化开发的缺点。jquery-components 是为了解决jquery无法组件化和无法构建SPA的工具库。
 
-### 1.2 为什么选择jquery-componets
+### 1.2 为什么选择jquery-components
 
-jquery-componets 拥有jquery的所有api，并在几乎无新增api的前提下完成了组件化，赋予了jquery新的生命。
+jquery-components 拥有jquery的所有api，并在几乎无新增api的前提下完成了组件化，赋予了jquery新的生命。
 
 
 
-## 2 安装使用
+## 2 安装依赖
 
-### 2.1 安装jquery-componets-loader
+### 2.1 依赖
 
-> jquery-componets-loader是解析.jq文件的webpack的loader
+jquery-components 是核心依赖，它用于在运行时起作用。
+
+jquery-components-loader 是webpack用于解析`.jq`文件的loader。
+
+
+
+### 2.2 jquery-components
+
+jquery-components 是jquery组件化的核心包，它提供了组件注册、解析、渲染、路由解析、事件分发等核心功能。
+
+```
+npm install jquery-components -S
+```
+
+
+
+### 2.3  jquery-components-loader
+
+jquery-components-loader是用于解析.jq文件的webpack的loader。
+
+安装命令：
 
 ```shell
-npm install jquery-componets-loader -D
+npm install jquery-components-loader -D
 ```
 
 
 
-### 2.2 安装jquery-componets
+安装完后我们需要在webpack.config.js中配置它
 
-> jquery-componets 是jquery组件化的核心包，它提供了组件注册、解析、渲染、路由解析、事件分发等核心功能。
-
-```
-npm install jquery-componets -S
-```
-
-
-
-### 2.3 在webpack.config.js的rules中配置jquery-componets-loader
-
-
-```javascript
+```js
 module: {
   rules: [
     {
       test: /\.jq/i,
-      loader: "jquery-componets-loader"
+      loader: "jquery-components-loader"
     }
   ],
 }
@@ -50,42 +59,132 @@ module: {
 
 
 
-### 2.4 HTML入口页面
+## 3 第一个应用
 
-```html
-<body>
-  <div id="app"></div>
-</body>
+
+
+demo代码在地址：https://github.com/fwx426328/jquery-components-demo
+
+
+
+### 3.1 安装依赖
+
+webpack依赖
+
+```sh
+npm install webpack webpack-cli webpack-dev-server html-webpack-plugin -D
 ```
 
 
 
-### 2.5 编写App.jq
+jquery-components-loader
+
+```shell
+npm install jquery-components-loader  -D
+```
+
+
+
+babel和css-loader也需要
+
+```shell
+npm install @babel/core babel-loader css-loader  -D
+```
+
+
+
+jquery 和 jquery-components
+
+```shell
+npm install jquery jquery-components  -S
+```
+
+
+
+### 3.2 配置webpack.config.js
+
+根目录新建webpack.config.js
+
+配置如下
+
+```shell
+const path = require('path');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+
+module.exports = {
+  devtool: "source-map",
+  mode: process.env.NODE_ENV,
+  entry: './src/main.js',
+  output: {
+    path: path.resolve(__dirname, 'dist'),
+    filename: 'bundle.js'
+  },
+  devServer: {
+    compress: true,
+    port: 8080,
+    hot: true
+  },
+  module: {
+    rules: [
+      {
+        test: /\.jq/i,
+        loader: "jquery-components-loader"
+      }
+    ],
+  },
+  plugins: [
+    new HtmlWebpackPlugin({
+      template: './public/index.html'
+    })
+  ]
+};
+
+```
+
+
+
+### 3.3 编写代码
+
+新建public/index.html文件
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<body>
+  <div id="app"></div>
+</body>
+</html>
+```
+
+
+
+新建src目录，目录下新建App.jq和main.js
+
+App.jq
 
 ```html
 <template>
-  <div>
-  	hello jquery-componets
-  </div>
+  <div>hello jquery</div>
 </template>
 <script>
-  export default function ($) {}
+export default function ($) {
+  
+}
 </script>
 <style>
-  * {
-    margin: 0;
-    padding: 0;
+  div {
+    color: red;
   }
 </style>
 ```
 
 
 
-### 2.6 在main.js中使用
+main.js
 
-```javascript
+```js
 import $ from 'jquery';
-import { useJquery } from 'jquery-componets';
+import { useJquery } from 'jquery-components';
 import App from './App.jq';
 
 useJquery($);
@@ -94,39 +193,45 @@ $("#app").html(App);
 
 
 
-启动webpack后页面显示
+在package.json中配置dev启动命令
 
-```html
-hello jquery-componets
+```json
+"scripts": {
+   "dev": "webpack serve --hot --mode=development"
+}
 ```
 
 
 
-## 3. 组件
+启动命令
 
-### 3.1 组件创建
-
-使用js创建一个组件，此方法不推荐。仅用于示例。
-
-```js
-// 声明一个组件
-const comp = {
-  template: '<div class="btn">我是一个组件, 点击我~</div>',
-  ready($) {
-    $(".btn").click(function() {
-      alert('hello world!')
-    });
-  }
-};
-// 选择dom元素挂载组件
-$(".my_components").html(comp);
+```
+npm run dev
 ```
 
 
 
-使用jq-loader创建组件
+最后我们可以看到界面出现红色的`hello jquery`
 
-simpCom.jq文件
+
+
+## 4 vscode插件
+
+由于`.jq`文件vscode无法识别，在vscode插件中搜索`jquery-components For Highlighter`
+
+安装插件即可识别`.jq`文件。 
+
+
+
+## 5 生命周期
+
+jquery-components 只有两个生命周期mounted和destroy
+
+
+
+### 5.1 mounted
+
+在`export default function($) {}`函数中的方法会在mounted的时候执行
 
 ```html
 <template>
@@ -141,50 +246,39 @@ simpCom.jq文件
 </script>
 ```
 
-引入和使用
 
-使用import标签引入自定义组件，name是组件名，src是组件路径。这样在template中就可以使用
+
+### 5.2 destroy
+
+destroy会在组件销毁的时候调用。
+
+使用`$.on('destroy', Funtion())`监听
 
 ```html
 <template>
-  <div>
-    <simpCom></simpCom>
-  </div>
+  <div class="btn">我是一个组件, 点击我~</div>
 </template>
-
-<import name="simpCom" src="../components/simpCom.jq"></import>
 <script>
-  export default function() {}
+  export default function($) {
+    $.on('destroy', () => {
+      console.log('destroy')
+    });
+  }
 </script>
 ```
 
 
 
-### 3.2 template的使用
+## 6 事件绑定和监听
 
-注意：
+`default`的函数中默认传递了一个`$`，这个`$`是对`jquery`的封装和扩展，包含着作用域限制和其他扩展方法。
 
-1. template必须含义一个根标签。
-2. 自定义组件的使用要使用双标签，单标签暂时不被支持。
+使用`$`即可对元素实现监听，同`jquery`的使用方法一样。
 
 ```html
 <template>
-  <div>
-    <div class="btn">我是一个组件, 点击我~</div>
-    <simpCom></simpCom>
-  </div>
+  <div class="btn">我是一个组件, 点击我~</div>
 </template>
-```
-
-
-
-### 3.3 script的使用
-
-script默认导出一个函数，这个函数会在组件被挂载完成后执行。
-
-默认函数中传入一个$参数，这个$做了作用域的限制，使用这个$仅仅能选中组件内的dom元素。
-
-```html
 <script>
   export default function($) {
     $(".btn").click(function() {
@@ -196,17 +290,61 @@ script默认导出一个函数，这个函数会在组件被挂载完成后执�
 
 
 
-### 3.4 style的使用
+## 7 组件
 
-style里面正常使用css即可，支持less等扩展语言。
+### 7.1 组件自定义
+
+自定义组件是jquery-components的核心内容。
+
+新建一个组件simpCom.jq
+
+```shell
+<template>
+  <div class="btn">我是一个组件, 点击我~</div>
+</template>
+<script>
+  export default function($) {
+    $(".btn").click(function() {
+      alert('hello world!')
+    });
+  }
+</script>
+```
 
 
 
-### 3.5 全局组件
+### 7.2 组件引入
+
+jquery-components中是通过`<import>标签`引入组件，如下面代码示例
+
+```html
+<import name="simpCom" src="../components/simpCom.jq"></import>
+```
+
+`<import>标签`中的的`src`属性指定自定义组件的地址，`name`属性指定在父组件中引用该组件时使用的**标签名称**
+
+示例如下：
+
+```html
+<import name="simpCom" src="../components/simpCom.jq"></import>
+
+<template>
+  <div>
+    <simpCom></simpCom>
+  </div>
+</template>
+<script>
+  export default function() {}
+</script>
+```
+
+
+
+### 7.3 全局组件注册
 
 我们声明了全局组件则不再需要引入。
 
-使用$.component(name, compontents)即可。
+使用`$.component(name, compontents)`即可。
 
 示例：
 
@@ -217,219 +355,13 @@ $.component('MyBtn', MyBtn)
 
 
 
-## 4 组件传参
+### 7.4 动态组件
 
-### 4.1 父组件向子组件传参
+动态组件是指在组件内部使用html方法挂载一个复杂组件的时候使用。
 
+如下 `js_content` 里面含有`<MyBtn></MyBtn>`标签，则需要声明为动态组件，以保证`<MyBtn></MyBtn>`按预期渲染。
 
-
-场景一：使用attr同步传入
-
-```html
-// 父组件中传入name
-<div>
-  <MyBtn name="父子传参"></MyBtn>
-</div>
-```
-
-在子组件MyBtn.jq中接受
-
-```html
-<template>
-  <div class="btn">按钮</div>
-</template>
-<script>
-  export default function ($) {
-    var name = $.el.attr('name');
-    console.log(name);
-  }
-</script>
-```
-
-
-
-场景二：如果是异步写入name，则需要下面方法
-
-```html
-<template>
-  <div>
-    <MyBtn class="btn"></MyBtn>
-    <div class="click">触发</div>
-  </div>
-</template>
-<script>
-  export default function ($) {
-    $(".click").click(function () {
-      $(".btn").attr('name', '父子传参');
-    });
-  }
-</script>
-```
-
-在子组件MyBtn.jq中使用监听到数据
-
-```html
-<template>
-  <div class="btn">按钮</div>
-</template>
-<script>
-  export default function ($) {
-    $.on('name', function (res) {
-      console.log(res);
-    });
-  }
-</script>
-```
-
-
-
-场景三：如果数据量太大或者数据格式，不适合用attr，则可以使用data方法
-
-```html
-<template>
-  <div>
-    <MyBtn class="btn"></MyBtn>
-    <div class="click">触发</div>
-  </div>
-</template>
-<script>
-  export default function ($) {
-    $(".click").click(function () {
-      $(".btn").data('name', { name: '父子传参' });
-    });
-  }
-</script>
-```
-
-在子组件一样可以监听的到
-
-```html
-<template>
-  <div class="btn">按钮</div>
-</template>
-<script>
-  export default function ($) {
-    $.on('name', function (res) {
-      console.log(res);
-    });
-  }
-</script>
-```
-
-
-
-### 4.2 子组件向父组件传参
-
-子组件
-
-```html
-<template>
-  <div class="btn">按钮</div>
-</template>
-<script>
-  export default function ($) {
-    $.el.click(function() {
-      $.el.trigger('onMyclick', '父组件需要的参数')
-    });
-  }
-</script>
-```
-
-父组件
-
-```html
-<template>
-  <div>
-    <MyBtn class="btn"></MyBtn>
-  </div>
-</template>
-<script>
-  export default function ($) {
-    $('.btn').on('childClick', function (evt, param) {
-      // param就是子组件传过来的参数
-      console.log(param);
-    });
-  }
-</script>
-```
-
-
-
-## 5 路由
-
-### 5.1 使用路由
-
-配置路由文件
-
-```js
-import Guide from '../pages/Guide.jq';
-import Init from '../pages/Init.jq';
-
-export default [
-  {
-    path: '/guide',
-    component: Guide
-  },
-  {
-    path: '/init',
-    component: Init
-  }
-];
-```
-
-在main.js中使用路由
-
-```js
-import routers from './router';
-
-$.router(routers)
-```
-
-
-
-App.jq中就可以使用router-view标签, `<router-view></router-view>`就可以展示路由页面。
-
-```html
-<template>
-  <div class="app">
-    <a href="#/guide">guide</a>
-    <a href="#/init">init</a>
-    <router-view></router-view>
-  </div>
-</template>
-<script>
-  export default function ($) {
-
-  }
-</script>
-```
-
-
-
-### 5.2 监听路由变化
-
-通过router事件即可监听
-
-```html
-<template>
-  <div class="btn">按钮</div>
-</template>
-<script>
-  export default function ($) {
-    $.on('router', function(res) {
-      console.log('router', res);
-    });
-  }
-</script>
-```
-
-
-
-## 6 动态组件
-
-动态组件是指在组件内部使用html方法挂载一个复杂组件的时候使用
-
-如下,  js_content里面含有MyBtn标签，则需要声明为动态组件，以保证Mybtn按预期渲染。
+使用`html`方法动态加载。
 
 ```html
 <template>
@@ -469,8 +401,313 @@ App.jq中就可以使用router-view标签, `<router-view></router-view>`就可�
 
 
 
-## 7 对jquery做了哪些改动
+## 8 父子组件通信
 
-1. 重写了html方法，在支持原来的字符串html写入dom的条件下，也支持了写入jquery组件。
-2. 新增了$.router方法挂载路由 (如果需要路由的话)。
-3. 新增了$.component全局组件声明。
+
+
+### 8.1 父组件向子组件传参
+
+**父组件通过 `attr`和`data`向子组件传递数据**
+
+
+
+**场景一**：使用attr同步传入
+
+```html
+// 父组件中传入name
+<div>
+  <MyBtn name="父子传参"></MyBtn>
+</div>
+```
+
+在子组件MyBtn.jq中接受
+
+```html
+<template>
+  <div class="btn">按钮</div>
+</template>
+<script>
+  export default function ($) {
+    var name = $.el.attr('name');
+    console.log(name);
+  }
+</script>
+```
+
+
+
+**场景二**：如果是异步写入name，则需要下面方法
+
+```html
+<template>
+  <div>
+    <MyBtn class="btn"></MyBtn>
+    <div class="click">触发</div>
+  </div>
+</template>
+<script>
+  export default function ($) {
+    $(".click").click(function () {
+      $(".btn").attr('name', '父子传参');
+    });
+  }
+</script>
+```
+
+在子组件MyBtn.jq中使用监听到数据
+
+```html
+<template>
+  <div class="btn">按钮</div>
+</template>
+<script>
+  export default function ($) {
+    $.on('name', function (res) {
+      console.log(res);
+    });
+  }
+</script>
+```
+
+
+
+**场景三**：如果数据量太大或者数据格式，不适合用attr，则可以使用data方法
+
+```html
+<template>
+  <div>
+    <MyBtn class="btn"></MyBtn>
+    <div class="click">触发</div>
+  </div>
+</template>
+<script>
+  export default function ($) {
+    $(".click").click(function () {
+      $(".btn").data('name', { name: '父子传参' });
+    });
+  }
+</script>
+```
+
+在子组件一样可以监听的到
+
+```html
+<template>
+  <div class="btn">按钮</div>
+</template>
+<script>
+  export default function ($) {
+    $.on('name', function (res) {
+      console.log(res);
+    });
+  }
+</script>
+```
+
+
+
+### 8.2 子组件向父组件传参
+
+**子组件通过 `trigger`向父组件传递数据，父组件使用自定事件监听**
+
+
+
+子组件
+
+```html
+<template>
+  <div class="btn">按钮</div>
+</template>
+<script>
+  export default function ($) {
+    $.el.click(function() {
+      $.el.trigger('onMyclick', '父组件需要的参数')
+    });
+  }
+</script>
+```
+
+父组件
+
+```html
+<template>
+  <div>
+    <MyBtn class="btn"></MyBtn>
+  </div>
+</template>
+<script>
+  export default function ($) {
+    $('.btn').on('childClick', function (evt, param) {
+      // param就是子组件传过来的参数
+      console.log(param);
+    });
+  }
+</script>
+```
+
+
+
+
+
+## 9. less和scss的使用
+
+在`<style></style>`标签中设置`lang`属性，使用后需要安装相应的loader
+
+例如：
+
+```html
+<style lang="less">
+  .app {
+    display: flex;
+    .app-content {
+      flex: 1;
+      padding: 20px;
+    }
+  }
+</style>
+```
+
+
+
+## 10 路由
+
+### 10.1 配置路由
+
+配置路由文件如下
+
+```js
+import Guide from '../pages/Guide.jq';
+import Init from '../pages/Init.jq';
+
+export default [
+  {
+    path: '/guide',
+    component: Guide
+  },
+  {
+    path: '/init',
+    component: Init
+  }
+];
+```
+
+
+
+### 10.2 注册和使用路由
+
+在main.js中注册路由
+
+```js
+import routers from './router';
+
+$.router(routers)
+```
+
+
+
+App.jq中就可以使用router-view标签, `<router-view></router-view>`就可以展示路由页面。
+
+```html
+<template>
+  <div class="app">
+    <a href="#/guide">guide</a>
+    <a href="#/init">init</a>
+    <router-view></router-view>
+  </div>
+</template>
+<script>
+  export default function ($) {
+
+  }
+</script>
+```
+
+
+
+### 10.3 监听路由变化
+
+通过router事件即可监听
+
+```html
+<template>
+  <div class="btn">按钮</div>
+</template>
+<script>
+  export default function ($) {
+    $.on('router', function(res) {
+      console.log('router', res);
+    });
+  }
+</script>
+```
+
+
+
+### 10.4 路由懒加载
+
+为了让打包体积减少，可以使用路由懒加载
+
+```js
+const Guide = () => import('../pages/Guide.jq');
+const Init = () => import('../pages/Init.jq');
+
+export default [
+  {
+    path: '/guide',
+    component: Guide
+  },
+  {
+    path: '/init',
+    component: Init
+  }
+];
+```
+
+
+
+### 10.5 子路由配置
+
+子路由使用`children`配置
+
+```js
+const Guide = () => import('../pages/Guide.jq');
+const Init = () => import('../pages/Init.jq');
+const Hello = () => import('../pages/Hello/Index.jq');
+
+export default [
+  {
+    path: '/guide',
+    component: Guide
+  },
+  {
+    path: '/init',
+    component: Init,
+    children: [
+      {
+        path: '/hello',
+        component: Hello,
+      }
+    ]
+  }
+];
+```
+
+
+
+### 10.6 路由监听
+
+通过router事件监听路由
+
+```html
+<template>
+  <div class="btn">按钮</div>
+</template>
+<script>
+  export default function ($) {
+    $.on('router', function(res) {
+      console.log('router', res);
+    });
+  }
+</script>
+```
+
