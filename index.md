@@ -162,7 +162,7 @@ module.exports = {
 
 App.jq
 
-```vue
+```html
 <template>
   <div>hello jquery</div>
 </template>
@@ -233,7 +233,7 @@ jquery-components 只有两个生命周期mounted和destroy
 
 在`export default function($) {}`函数中的方法会在mounted的时候执行
 
-```vue
+```html
 <template>
   <div class="btn">我是一个组件, 点击我~</div>
 </template>
@@ -254,7 +254,7 @@ destroy会在组件销毁的时候调用。
 
 使用`$.on('destroy', Funtion())`监听
 
-```vue
+```html
 <template>
   <div class="btn">我是一个组件, 点击我~</div>
 </template>
@@ -275,7 +275,7 @@ destroy会在组件销毁的时候调用。
 
 使用`$`即可对元素实现监听，同`jquery`的使用方法一样。
 
-```vue
+```html
 <template>
   <div class="btn">我是一个组件, 点击我~</div>
 </template>
@@ -298,7 +298,7 @@ destroy会在组件销毁的时候调用。
 
 新建一个组件simpCom.jq
 
-```vue
+```html
 <template>
   <div class="btn">我是一个组件, 点击我~</div>
 </template>
@@ -325,7 +325,7 @@ jquery-components中是通过`<import>标签`引入组件，如下面代码示�
 
 示例如下：
 
-```vue
+```html
 <import name="simpCom" src="../components/simpCom.jq"></import>
 
 <template>
@@ -363,7 +363,7 @@ $.component('MyBtn', MyBtn)
 
 使用`html`方法动态加载。
 
-```vue
+```html
 <template>
   <div>
     <div class="js_content"></div>
@@ -413,7 +413,7 @@ $.component('MyBtn', MyBtn)
 
 **场景一**：使用attr同步传入
 
-```vue
+```html
 // 父组件中传入name
 <div>
   <MyBtn name="父子传参"></MyBtn>
@@ -422,7 +422,7 @@ $.component('MyBtn', MyBtn)
 
 在子组件MyBtn.jq中接受
 
-```vue
+```html
 <template>
   <div class="btn">按钮</div>
 </template>
@@ -438,7 +438,7 @@ $.component('MyBtn', MyBtn)
 
 **场景二**：如果是异步写入name，则需要下面方法
 
-```vue
+```html
 <template>
   <div>
     <MyBtn class="btn"></MyBtn>
@@ -456,7 +456,7 @@ $.component('MyBtn', MyBtn)
 
 在子组件MyBtn.jq中使用监听到数据
 
-```vue
+```html
 <template>
   <div class="btn">按钮</div>
 </template>
@@ -473,7 +473,7 @@ $.component('MyBtn', MyBtn)
 
 **场景三**：如果数据量太大或者数据格式，不适合用attr，则可以使用data方法
 
-```vue
+```html
 <template>
   <div>
     <MyBtn class="btn"></MyBtn>
@@ -491,7 +491,7 @@ $.component('MyBtn', MyBtn)
 
 在子组件一样可以监听的到
 
-```vue
+```html
 <template>
   <div class="btn">按钮</div>
 </template>
@@ -514,7 +514,7 @@ $.component('MyBtn', MyBtn)
 
 子组件
 
-```vue
+```html
 <template>
   <div class="btn">按钮</div>
 </template>
@@ -529,7 +529,7 @@ $.component('MyBtn', MyBtn)
 
 父组件
 
-```vue
+```html
 <template>
   <div>
     <MyBtn class="btn"></MyBtn>
@@ -555,7 +555,7 @@ $.component('MyBtn', MyBtn)
 
 例如：
 
-```vue
+```html
 <style lang="less">
   .app {
     display: flex;
@@ -607,7 +607,7 @@ $.router(routers)
 
 App.jq中就可以使用router-view标签, `<router-view></router-view>`就可以展示路由页面。
 
-```vue
+```html
 <template>
   <div class="app">
     <a href="#/guide">guide</a>
@@ -628,7 +628,7 @@ App.jq中就可以使用router-view标签, `<router-view></router-view>`就可�
 
 通过router事件即可监听
 
-```vue
+```html
 <template>
   <div class="btn">按钮</div>
 </template>
@@ -698,7 +698,7 @@ export default [
 
 通过router事件监听路由
 
-```vue
+```html
 <template>
   <div class="btn">按钮</div>
 </template>
