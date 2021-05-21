@@ -400,6 +400,37 @@ $.component('MyBtn', MyBtn)
 ```
 
 
+### 7.5 插槽
+
+插槽示例如下：
+创建一个带插槽的组件
+
+```html
+<template>
+  <div>
+    <div>卡片</div>
+    <slot name="header"></slot>
+    <slot></slot>
+    <div>底部</div>
+  </div>
+</template>
+```
+
+在父组件中使用带插槽的组件
+```html
+<import name="SlotEg" src="./SlotEg.jq"></import>
+
+<template>
+  <div>
+    <h1>hello jquery-componets</h1>
+    <SlotEg>
+      <div> default content </div>
+      <div slot="header"> header content </div>
+    </SlotEg>
+  </div>
+</template>
+```
+
 
 ## 8 父子组件通信
 
