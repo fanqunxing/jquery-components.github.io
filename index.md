@@ -325,7 +325,7 @@ destroy会在组件销毁的时候调用。
 jquery-components中是通过`<import>标签`引入组件，如下面代码示例
 
 ```html
-<import name="simpCom" src="../components/simpCom.jq"></import>
+<import name="simpCom" src="./simpCom.jq"></import>
 ```
 
 `<import>标签`中的的`src`属性指定自定义组件的地址，`name`属性指定在父组件中引用该组件时使用的**标签名称**
@@ -333,7 +333,7 @@ jquery-components中是通过`<import>标签`引入组件，如下面代码示�
 示例如下：
 
 ```html
-<import name="simpCom" src="../components/simpCom.jq"></import>
+<import name="simpCom" src="./simpCom.jq"></import>
 
 <template>
   <div>
