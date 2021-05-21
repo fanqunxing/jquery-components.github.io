@@ -252,7 +252,7 @@ jquery-components 只有两个生命周期mounted和destroy
 
 destroy会在组件销毁的时候调用。
 
-使用`$.on('destroy', Funtion())`监听
+使用`$.on('destroy', () => {})`监听
 
 ```html
 <template>
@@ -271,6 +271,8 @@ destroy会在组件销毁的时候调用。
 
 ## 6 事件绑定和监听
 
+### 6.1 元素的事件监听
+
 `default`的函数中默认传递了一个`$`，这个`$`是对`jquery`的封装和扩展，包含着作用域限制和其他扩展方法。
 
 使用`$`即可对元素实现监听，同`jquery`的使用方法一样。
@@ -287,6 +289,13 @@ destroy会在组件销毁的时候调用。
   }
 </script>
 ```
+
+### 6.2 内置事件监听
+
+`jquery-components`内置了几个系统事件，用于事件和生命周期的监听。都采用`$.on('name', () => {})`监听。
+
+- router事件 用于监听路由
+- destroy事件 用于监听destroy生命周期
 
 
 
@@ -333,9 +342,6 @@ jquery-components中是通过`<import>标签`引入组件，如下面代码示�
     <simpCom></simpCom>
   </div>
 </template>
-<script>
-  export default function() {}
-</script>
 ```
 
 
@@ -408,10 +414,9 @@ $.component('MyBtn', MyBtn)
 ```html
 <template>
   <div>
-    <div> slot </div>
     <slot name="header"></slot>
     <slot></slot>
-    <div> footer </div>
+    <div>footer</div>
   </div>
 </template>
 ```
@@ -421,12 +426,10 @@ $.component('MyBtn', MyBtn)
 <import name="SlotEg" src="./SlotEg.jq"></import>
 
 <template>
-  <div>
-    <SlotEg>
-      <div> default content </div>
-      <div slot="header"> header content </div>
-    </SlotEg>
-  </div>
+  <SlotEg>
+    <div> default content </div>
+    <div slot="header"> header content </div>
+  </SlotEg>
 </template>
 ```
 
@@ -444,21 +447,24 @@ $.component('MyBtn', MyBtn)
 **场景一**：使用attr同步传入
 
 ```html
-// 父组件中传入name
+<import name="MyBtn" src="./MyBtn.jq"></import>
+
+<!-- 父组件中传入name -->
 <div>
   <MyBtn name="父子传参"></MyBtn>
 </div>
 ```
 
-在子组件MyBtn.jq中接受
+
 
 ```html
+<!-- 在子组件MyBtn.jq中接受 -->
 <template>
-  <div class="btn">按钮</div>
+  <div>按钮</div>
 </template>
 <script>
   export default function ($) {
-    var name = $.el.attr('name');
+    const name = $.el.attr('name');
     console.log(name);
   }
 </script>
@@ -469,16 +475,18 @@ $.component('MyBtn', MyBtn)
 **场景二**：如果是异步写入name，则需要下面方法
 
 ```html
+<import name="MyBtn" src="./MyBtn.jq"></import>
+
 <template>
   <div>
-    <MyBtn class="btn"></MyBtn>
+    <MyBtn class="my-btn"></MyBtn>
     <div class="click">触发</div>
   </div>
 </template>
 <script>
   export default function ($) {
     $(".click").click(function () {
-      $(".btn").attr('name', '父子传参');
+      $(".my-btn").attr('name', '父子传参');
     });
   }
 </script>
@@ -488,7 +496,7 @@ $.component('MyBtn', MyBtn)
 
 ```html
 <template>
-  <div class="btn">按钮</div>
+  <div>按钮</div>
 </template>
 <script>
   export default function ($) {
@@ -504,16 +512,18 @@ $.component('MyBtn', MyBtn)
 **场景三**：如果数据量太大或者数据格式，不适合用attr，则可以使用data方法
 
 ```html
+<import name="MyBtn" src="./MyBtn.jq"></import>
+
 <template>
   <div>
-    <MyBtn class="btn"></MyBtn>
+    <MyBtn class="my-btn"></MyBtn>
     <div class="click">触发</div>
   </div>
 </template>
 <script>
   export default function ($) {
     $(".click").click(function () {
-      $(".btn").data('name', { name: '父子传参' });
+      $(".my-btn").data('name', { name: '父子传参' });
     });
   }
 </script>
@@ -523,7 +533,7 @@ $.component('MyBtn', MyBtn)
 
 ```html
 <template>
-  <div class="btn">按钮</div>
+  <div>按钮</div>
 </template>
 <script>
   export default function ($) {
@@ -551,7 +561,7 @@ $.component('MyBtn', MyBtn)
 <script>
   export default function ($) {
     $.el.click(function() {
-      $.el.trigger('onMyclick', '父组件需要的参数')
+      $.el.trigger('childClick', '父组件需要的参数')
     });
   }
 </script>
@@ -560,15 +570,16 @@ $.component('MyBtn', MyBtn)
 父组件
 
 ```html
+<import name="MyBtn" src="./MyBtn.jq"></import>
+
 <template>
   <div>
-    <MyBtn class="btn"></MyBtn>
+    <MyBtn class="my-btn"></MyBtn>
   </div>
 </template>
 <script>
   export default function ($) {
-    $('.btn').on('childClick', function (evt, param) {
-      // param就是子组件传过来的参数
+    $('.my-btn').on('childClick', function (evt, param) {
       console.log(param);
     });
   }
@@ -606,8 +617,8 @@ $.component('MyBtn', MyBtn)
 配置路由文件如下
 
 ```js
-import Guide from '../pages/Guide.jq';
-import Init from '../pages/Init.jq';
+import Guide from './Guide.jq';
+import Init from './Init.jq';
 
 export default [
   {
@@ -645,11 +656,6 @@ App.jq中就可以使用router-view标签, `<router-view></router-view>`就可�
     <router-view></router-view>
   </div>
 </template>
-<script>
-  export default function ($) {
-
-  }
-</script>
 ```
 
 
@@ -678,8 +684,8 @@ App.jq中就可以使用router-view标签, `<router-view></router-view>`就可�
 为了让打包体积减少，可以使用路由懒加载
 
 ```js
-const Guide = () => import('../pages/Guide.jq');
-const Init = () => import('../pages/Init.jq');
+const Guide = () => import('./Guide.jq');
+const Init = () => import('./Init.jq');
 
 export default [
   {
@@ -700,9 +706,9 @@ export default [
 子路由使用`children`配置
 
 ```js
-const Guide = () => import('../pages/Guide.jq');
-const Init = () => import('../pages/Init.jq');
-const Hello = () => import('../pages/Hello/Index.jq');
+const Guide = () => import('./Guide.jq');
+const Init = () => import('./Init.jq');
+const Hello = () => import('.Hello.jq');
 
 export default [
   {
@@ -730,7 +736,7 @@ export default [
 
 ```html
 <template>
-  <div class="btn">按钮</div>
+  <div></div>
 </template>
 <script>
   export default function ($) {
