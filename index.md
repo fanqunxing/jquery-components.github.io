@@ -1,5 +1,3 @@
-# jquery-components
-
 ## 1 介绍
 
 ### 1.1 什么是jquery-components
