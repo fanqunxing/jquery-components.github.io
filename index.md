@@ -408,10 +408,10 @@ $.component('MyBtn', MyBtn)
 ```html
 <template>
   <div>
-    <div>卡片</div>
+    <div> slot </div>
     <slot name="header"></slot>
     <slot></slot>
-    <div>底部</div>
+    <div> footer </div>
   </div>
 </template>
 ```
@@ -422,7 +422,6 @@ $.component('MyBtn', MyBtn)
 
 <template>
   <div>
-    <h1>hello jquery-componets</h1>
     <SlotEg>
       <div> default content </div>
       <div slot="header"> header content </div>
