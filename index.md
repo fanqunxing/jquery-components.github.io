@@ -78,7 +78,7 @@ npm install webpack webpack-cli webpack-dev-server html-webpack-plugin -D
 jquery-components-loader
 
 ```shell
-npm install jquery-components-loader  -D
+npm install jquery-components-loader -D
 ```
 
 
@@ -86,7 +86,7 @@ npm install jquery-components-loader  -D
 babel和css-loader也需要
 
 ```shell
-npm install @babel/core babel-loader css-loader  -D
+npm install @babel/core babel-loader css-loader -D
 ```
 
 
@@ -94,7 +94,7 @@ npm install @babel/core babel-loader css-loader  -D
 jquery 和 jquery-components
 
 ```shell
-npm install jquery jquery-components  -S
+npm install jquery jquery-components -S
 ```
 
 
